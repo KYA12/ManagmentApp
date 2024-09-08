@@ -13,6 +13,12 @@ public class OrdersController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Retrieves all orders.
+    /// </summary>
+    /// <returns>A list of <see cref="OrderDto"/> objects.</returns>
+    /// <response code="200">Returns the list of orders.</response>
+    /// <response code="500">If there is an internal server error.</response>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllOrders()
     {
@@ -29,6 +35,14 @@ public class OrdersController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Retrieves a specific order by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the order to retrieve.</param>
+    /// <returns>The <see cref="OrderDto"/> object with the specified ID.</returns>
+    /// <response code="200">Returns the order with the specified ID.</response>
+    /// <response code="404">If the order with the specified ID is not found.</response>
+    /// <response code="500">If there is an internal server error.</response>
     [HttpGet("{id}")]
     public async Task<ActionResult<OrderDto>> GetOrder(int id)
     {
@@ -52,6 +66,14 @@ public class OrdersController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Creates a new order.
+    /// </summary>
+    /// <param name="orderDto">The order data to create.</param>
+    /// <returns>A response indicating the result of the operation.</returns>
+    /// <response code="201">If the order is successfully created.</response>
+    /// <response code="400">If the order data is invalid.</response>
+    /// <response code="500">If there is an internal server error.</response>
     [HttpPost]
     public async Task<ActionResult> CreateOrder([FromBody] OrderDto orderDto)
     {
@@ -65,7 +87,7 @@ public class OrdersController : ControllerBase
         try
         {
             var result = await _orderService.CreateOrderAsync(orderDto);
-            
+
             if (result > 0)
             {
                 return CreatedAtAction(nameof(GetOrder), new { id = orderDto.OrderId }, orderDto);
@@ -83,6 +105,16 @@ public class OrdersController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Updates the status of an existing order.
+    /// </summary>
+    /// <param name="id">The ID of the order to update.</param>
+    /// <param name="status">The new status of the order.</param>
+    /// <returns>A response indicating the result of the operation.</returns>
+    /// <response code="204">If the order status is successfully updated.</response>
+    /// <response code="400">If the status is null or empty.</response>
+    /// <response code="404">If the order with the specified ID is not found.</response>
+    /// <response code="500">If there is an internal server error.</response>
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateOrderStatus(int id, [FromQuery] string status)
     {
@@ -119,13 +151,21 @@ public class OrdersController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Deletes an existing order by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the order to delete.</param>
+    /// <returns>A response indicating the result of the operation.</returns>
+    /// <response code="204">If the order is successfully deleted.</response>
+    /// <response code="404">If the order with the specified ID is not found.</response>
+    /// <response code="500">If there is an internal server error.</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteOrder(int id)
     {
         _logger.LogInformation($"Deleting order with id {id}");
         try
         {
-            var result =  await _orderService.DeleteOrderAsync(id);
+            var result = await _orderService.DeleteOrderAsync(id);
 
             if (result > 0)
             {

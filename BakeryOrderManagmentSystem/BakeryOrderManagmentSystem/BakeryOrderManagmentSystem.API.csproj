@@ -34,4 +34,8 @@
   <ItemGroup>
     <Protobuf Include="Protos/bakery.proto" GrpcServices="Both" />
   </ItemGroup>
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin\Debug\net8.0\BakeryOrderManagmentSystem.API.xml</DocumentationFile>
+  </PropertyGroup>
 </Project>
