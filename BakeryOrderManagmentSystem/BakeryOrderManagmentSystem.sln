@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BakeryOrderManagmentSystem.API", "BakeryOrderManagmentSystem\BakeryOrderManagmentSystem.API.csproj", "{3905F21E-F3CA-44F9-8357-299D843BA10F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BakeryOrderManagementSystem.Tests", "BakeryOrderManagementSystem.Tests\BakeryOrderManagementSystem.Tests.csproj", "{CE8B8EA9-09C3-45AD-A0C2-A1A4BE6C8C21}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3905F21E-F3CA-44F9-8357-299D843BA10F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3905F21E-F3CA-44F9-8357-299D843BA10F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3905F21E-F3CA-44F9-8357-299D843BA10F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3905F21E-F3CA-44F9-8357-299D843BA10F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE8B8EA9-09C3-45AD-A0C2-A1A4BE6C8C21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE8B8EA9-09C3-45AD-A0C2-A1A4BE6C8C21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE8B8EA9-09C3-45AD-A0C2-A1A4BE6C8C21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE8B8EA9-09C3-45AD-A0C2-A1A4BE6C8C21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A72D9E86-DC53-4080-945E-1C276690A32C}
+	EndGlobalSection
+EndGlobal

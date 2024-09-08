@@ -1,0 +1,70 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Order Tracking</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="orders.length === 0 && errorMessage.length === 0" class="no-orders-message">
+      <p>No Orders</p>
+    </div>
+    <div class="order-list">
+      <div 
+        *ngFor="let order of orders" 
+        class="order-item" 
+        (click)="viewOrder(order.orderId)"
+      >
+        <div class="order-header">
+          <mat-icon>receipt</mat-icon>
+          <div class="order-details">
+            <div>Order ID: {{ order.orderId }}</div>
+            <div>Date: {{ order.orderDate | date }}</div>
+            <div>Status: {{ order.status }}</div>
+          </div>
+          <button mat-icon-button (click)="deleteOrder(order.orderId)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="selectedOrder" class="selected-order-details">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Order Details - ID: {{ selectedOrder.orderId }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p><strong>Customer ID:</strong> {{ selectedOrder.customerId }}</p>
+          <p><strong>Date:</strong> {{ selectedOrder.orderDate | date }}</p>
+          <p><strong>Status:</strong> {{ selectedOrder.status }}</p>
+
+          <div class="order-products">
+            <div *ngFor="let item of selectedOrder.ordersProducts" class="product-item">
+              <mat-icon>shopping_cart</mat-icon>
+              <div class="product-id">Product ID: {{ item.productId }}</div>
+              <div class="product-name">Product Name: {{ item.productName }}</div>
+              <div class="quantity">Quantity: {{ item.quantity }}</div>
+            </div>
+          </div>
+
+          <mat-form-field>
+            <mat-label>Update Status</mat-label>
+            <mat-select [(value)]="selectedOrder.status">
+              <mat-option *ngFor="let status of orderStatuses" [value]="status">{{ status }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="button-container">
+            <button mat-raised-button color="primary" (click)="updateOrderStatus(selectedOrder.orderId, selectedOrder.status)">
+              Update Status
+            </button>
+            <button mat-raised-button color="warn" (click)="clearSelection()">
+              Clear Selection
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card-content>
+</mat-card>

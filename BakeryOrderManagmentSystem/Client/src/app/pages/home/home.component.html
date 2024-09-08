@@ -1,0 +1,29 @@
+<div class="product-list">
+  <mat-form-field appearance="fill">
+    <mat-label>Search products</mat-label>
+    <input matInput [(ngModel)]="searchText" placeholder="Enter product name">
+  </mat-form-field>
+ 
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <button mat-raised-button color="primary" (click)="createProduct()">Add New Product</button>
+
+  <div class="products-container">
+    <mat-card *ngFor="let product of products | filter: searchText" class="product-card">
+      <mat-card-header>
+        <mat-card-title>{{ product.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ product.description }}</p>
+        <p><strong>Price:</strong> ${{ product.price | number:'1.2-2' }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="editProduct(product.productId)">Edit</button>
+        <button mat-raised-button color="warn" (click)="deleteProduct(product.productId)">Delete</button>
+        <button mat-raised-button color="accent" [routerLink]="['/product', product.productId]">View Details</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

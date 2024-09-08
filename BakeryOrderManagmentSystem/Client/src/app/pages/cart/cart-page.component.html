@@ -1,0 +1,31 @@
+<mat-card class="cart-page-card">
+  <mat-card-header>
+    <mat-card-title class="title">Shopping Cart</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <p>Empty</p>
+    </div>
+    
+    <div *ngIf="cartItems.length > 0">
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <mat-card class="item-card">
+          <mat-card-header>
+            <mat-card-title>{{ item.product.name }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="item-details">
+              <div class="item-price">Price: {{ item.product.price | currency }}</div>
+              <div class="item-quantity">Quantity: {{ item.quantity }}</div>
+            </div>
+            <button mat-button (click)="removeFromCart(item.product.productId)">Remove</button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="accent" [disabled]="cartItems.length === 0" (click)="placeOrder()">Place Order</button>
+  </mat-card-actions>
+</mat-card>

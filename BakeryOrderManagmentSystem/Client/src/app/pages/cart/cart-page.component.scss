@@ -1,0 +1,83 @@
+.cart-page-card {
+  padding: 20px;
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: center; 
+  width: 100%;
+}
+
+.empty-cart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; 
+  font-size: 1.5em;
+  color: #888; 
+  text-align: center; 
+}
+
+.cart-item {
+  margin-bottom: 20px;
+}
+
+.item-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.item-details {
+  display: flex;
+  justify-content: center; 
+  width: 100%; 
+  margin-bottom: 10px;
+}
+
+.item-price,
+.item-quantity {
+  margin: 0 10px; 
+}
+
+.item-price {
+  text-align: center;
+}
+
+.item-quantity {
+  text-align: center;
+}
+
+button {
+  min-width: 120px;
+  margin-top: 10px;
+}
+
+.total-cost {
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-top: 20px;
+  text-align: center; 
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center; 
+  padding-top: 10px;
+  gap: 10px;
+}
