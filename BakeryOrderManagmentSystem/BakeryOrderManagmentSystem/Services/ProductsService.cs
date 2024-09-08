@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BakeryOrderManagmentSystem.API.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 public class ProductService : IProductService
@@ -6,12 +8,14 @@ public class ProductService : IProductService
     private readonly BakeryDbContext _context;
     private readonly IMapper _mapper;
     private readonly ILogger<ProductService> _logger;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public ProductService(BakeryDbContext context, IMapper mapper, ILogger<ProductService> logger)
+    public ProductService(BakeryDbContext context, IMapper mapper, ILogger<ProductService> logger, IHubContext<NotificationHub> hubContext)
     {
         _context = context;
         _mapper = mapper;
         _logger = logger;
+        _hubContext = hubContext;
     }
 
     public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
@@ -81,8 +85,11 @@ public class ProductService : IProductService
         }
 
         existingProduct.IsActive = false;
-
         _context.Products.Update(existingProduct);
-        return await _context.SaveChangesAsync();
+        var result = await _context.SaveChangesAsync();
+
+        await _hubContext.Clients.All.SendAsync("ReceiveProductDeleted", id);
+
+        return result;
     }
 }

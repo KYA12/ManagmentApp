@@ -1,3 +1,4 @@
+using BakeryOrderManagmentSystem.API.Hubs;
 using BakeryOrderManagmentSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -33,6 +34,9 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
                        .AllowCredentials();
             }));
 
+// Add SignalR service
+builder.Services.AddSignalR();
+
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
@@ -57,6 +61,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("CorsPolicy");
 app.MapControllers();
+app.MapHub<NotificationHub>("/notificationHub");
 app.MapGrpcService<BakeryGrpcService>();
 
 app.ApplyMigration();

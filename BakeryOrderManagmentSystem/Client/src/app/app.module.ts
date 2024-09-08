@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -54,6 +55,7 @@ import { FilterPipe } from './core/pipes/filter.pipe';
     MatDialogModule,
     MatSelectModule, 
     MatOptionModule,
+    MatSnackBarModule,
     FormsModule,
     ReactiveFormsModule
   ],

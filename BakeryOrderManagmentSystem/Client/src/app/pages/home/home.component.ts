@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from '../../core/models/product.model';
 import { Router } from '@angular/router';
+import { SignalRService } from '../../core/services/signalr.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-home',
@@ -13,15 +15,25 @@ export class HomeComponent implements OnInit {
   searchText: string = '';
   errorMessage: string = '';
 
-  constructor(private productService: ProductService, private router: Router) {}
+  constructor(
+    private productService: ProductService,
+    private router: Router,
+    private signalRService: SignalRService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts();
+    this.signalRService.message$.subscribe(message => {
+      this.snackBar.open(message, 'Close', {
+        duration: 5000,
+      });
+    });
   }
 
   loadProducts(): void {
-    this.productService.getActiveProducts().subscribe( { 
-      next: (products) => { this.products = products; } ,
+    this.productService.getActiveProducts().subscribe({
+      next: (products) => { this.products = products; },
       error: (err) => this.errorMessage = 'Error loading products: ' + err.message
     });
   }
