@@ -2,7 +2,7 @@
 
 namespace BakeryOrderManagmentSystem.API.Hubs
 {
-    public class NotificationHub : Hub
+    public class NotificationHub : Hub, INotificationHub
     {
         public async Task NotifyProductDeleted(int productId)
         {

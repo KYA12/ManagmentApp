@@ -4,16 +4,20 @@ using BakeryOrderManagementSystem.Grpc;
 using Empty = BakeryOrderManagementSystem.Grpc.Empty;
 using Microsoft.EntityFrameworkCore;
 using BakeryOrderManagmentSystem.Models;
+using BakeryOrderManagmentSystem.API.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 public class BakeryGrpcService : BakeryService.BakeryServiceBase
 {
     private readonly BakeryDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-    public BakeryGrpcService(BakeryDbContext context, IMapper mapper)
+    public BakeryGrpcService(BakeryDbContext context, IMapper mapper, IHubContext<NotificationHub> hubContext)
     {
         _context = context;
         _mapper = mapper;
+        _hubContext = hubContext;
     }
 
     public override async Task<ProductResponse> CreateProduct(CreateProductRequest request, ServerCallContext context)
@@ -34,6 +38,7 @@ public class BakeryGrpcService : BakeryService.BakeryServiceBase
     public override async Task<ProductResponse> GetProduct(GetProductRequest request, ServerCallContext context)
     {
         var product = await _context.Products.FindAsync(request.ProductId);
+        
         if (product == null)
         {
             throw new RpcException(new Status(StatusCode.NotFound, "Product not found"));
@@ -45,6 +50,7 @@ public class BakeryGrpcService : BakeryService.BakeryServiceBase
     public override async Task<ProductResponse> UpdateProduct(UpdateProductRequest request, ServerCallContext context)
     {
         var product = await _context.Products.FindAsync(request.ProductId);
+      
         if (product == null)
         {
             throw new RpcException(new Status(StatusCode.NotFound, "Product not found"));
@@ -63,6 +69,7 @@ public class BakeryGrpcService : BakeryService.BakeryServiceBase
     public override async Task<Empty> DeleteProduct(DeleteProductRequest request, ServerCallContext context)
     {
         var product = await _context.Products.FindAsync(request.ProductId);
+   
         if (product == null)
         {
             throw new RpcException(new Status(StatusCode.NotFound, "Product not found"));
@@ -70,6 +77,7 @@ public class BakeryGrpcService : BakeryService.BakeryServiceBase
 
         _context.Products.Remove(product);
         await _context.SaveChangesAsync();
+        await _hubContext.Clients.All.SendAsync("ReceiveProductDeleted", request.ProductId);
 
         return new Empty();
     }

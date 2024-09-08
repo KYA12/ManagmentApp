@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using BakeryOrderManagmentSystem.API.Hubs;
 using FluentAssertions;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -10,10 +12,22 @@ namespace BakeryOrderManagementSystem.Tests.ProductServiceTests
     {
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<ILogger<ProductService>> _mockLogger;
+        private readonly Mock<IHubContext<NotificationHub>> _mockNotificationHub;
+        private readonly Mock<IHubClients> _mockClients;
+        private readonly Mock<IClientProxy> _mockClientProxy;
 
         public ProductServiceTests()
         {
             _mockMapper = new Mock<IMapper>();
+
+            _mockNotificationHub = new Mock<IHubContext<NotificationHub>>();
+            _mockClients = new Mock<IHubClients>();
+            _mockClientProxy = new Mock<IClientProxy>();
+
+            // Set up HubContext mock to return mocked clients
+            _mockNotificationHub.Setup(hub => hub.Clients).Returns(_mockClients.Object);
+            _mockClients.Setup(clients => clients.All).Returns(_mockClientProxy.Object);
+
 
             _mockMapper.Setup(m => m.Map<ProductDto>(It.IsAny<Product>())).Returns<Product>(p => new ProductDto
             {
@@ -86,7 +100,7 @@ namespace BakeryOrderManagementSystem.Tests.ProductServiceTests
             _context.Products.AddRange(products);
             await _context.SaveChangesAsync();
 
-            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object);
+            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object, _mockNotificationHub.Object);
 
             // Act
             var result = await _productService.GetAllProductsAsync();
@@ -109,7 +123,7 @@ namespace BakeryOrderManagementSystem.Tests.ProductServiceTests
 
             await _context.SaveChangesAsync();
 
-            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object);
+            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object, _mockNotificationHub.Object);
 
             // Act
             var result = await _productService.GetProductAsync(1);
@@ -136,7 +150,7 @@ namespace BakeryOrderManagementSystem.Tests.ProductServiceTests
                 IsActive = true
             });
 
-            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object);
+            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object, _mockNotificationHub.Object);
 
             // Act
             var result = await _productService.CreateProductAsync(productDto);
@@ -161,7 +175,7 @@ namespace BakeryOrderManagementSystem.Tests.ProductServiceTests
                 new Product { ProductId = 2, Name = "Inactive Cookie", Price = 5.0m, IsActive = false, Description = "Cookie" }
             );
             await _context.SaveChangesAsync();
-            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object);
+            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object, _mockNotificationHub.Object);
 
             // Act
             var result = await _productService.GetActiveProducts();
@@ -182,7 +196,7 @@ namespace BakeryOrderManagementSystem.Tests.ProductServiceTests
             await _context.SaveChangesAsync();
 
             var productDto = new ProductDto { ProductId = 1, Name = "Updated Cake", Price = 12.0m, Description = "Delicious Cake", IsActive = true };
-            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object);
+            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object, _mockNotificationHub.Object);
 
             // Act
             await _productService.UpdateProductAsync(1, productDto);
@@ -202,7 +216,7 @@ namespace BakeryOrderManagementSystem.Tests.ProductServiceTests
             await ClearDatabase(_context);
             _context.Products.Add(new Product { ProductId = 1, Name = "Cake", Price = 10.0m, Description = "Delicious Cake", IsActive = true });
             await _context.SaveChangesAsync();
-            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object);
+            var _productService = new ProductService(_context, _mockMapper.Object, _mockLogger.Object, _mockNotificationHub.Object);
 
             // Act
             var result = await _productService.DeleteProductAsync(1);
